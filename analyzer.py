@@ -25,3 +25,23 @@ def get_info(data):
         "columns": len(cols),
         "column_names": cols
     }
+
+
+def basic_stats(data, column):
+    values = []
+    for row in data:
+        try:
+            values.append(float(row[column]))
+        except (ValueError, KeyError):
+            continue
+    if not values:
+        return {}
+    values.sort()
+    n = len(values)
+    return {
+        "count": n,
+        "mean": sum(values) / n,
+        "min": values[0],
+        "max": values[-1],
+        "median": values[n // 2] if n % 2 else (values[n//2 - 1] + values[n//2]) / 2
+    }
