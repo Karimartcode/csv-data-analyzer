@@ -45,3 +45,20 @@ def basic_stats(data, column):
         "max": values[-1],
         "median": values[n // 2] if n % 2 else (values[n//2 - 1] + values[n//2]) / 2
     }
+
+
+def filter_rows(data, column, op, value):
+    results = []
+    for row in data:
+        cell = row.get(column, "")
+        try:
+            cell_val = float(cell)
+            value_f = float(value)
+            if op == ">" and cell_val > value_f: results.append(row)
+            elif op == "<" and cell_val < value_f: results.append(row)
+            elif op == ">=" and cell_val >= value_f: results.append(row)
+            elif op == "<=" and cell_val <= value_f: results.append(row)
+            elif op == "==" and cell_val == value_f: results.append(row)
+        except ValueError:
+            if op == "==" and cell == value: results.append(row)
+    return results
