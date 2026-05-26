@@ -62,3 +62,13 @@ def filter_rows(data, column, op, value):
         except ValueError:
             if op == "==" and cell == value: results.append(row)
     return results
+
+
+def sort_data(data, column, reverse=False):
+    def key_fn(row):
+        val = row.get(column, "")
+        try:
+            return (0, float(val))
+        except ValueError:
+            return (1, val)
+    return sorted(data, key=key_fn, reverse=reverse)
