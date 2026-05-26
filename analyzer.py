@@ -72,3 +72,38 @@ def sort_data(data, column, reverse=False):
         except ValueError:
             return (1, val)
     return sorted(data, key=key_fn, reverse=reverse)
+
+
+def group_by(data, column):
+    groups = {}
+    for row in data:
+        key = row.get(column, "")
+        if key not in groups:
+            groups[key] = []
+        groups[key].append(row)
+    return groups
+
+
+def aggregate(groups, agg_column, func="count"):
+    results = {}
+    for key, rows in groups.items():
+        if func == "count":
+            results[key] = len(rows)
+        else:
+            values = []
+            for r in rows:
+                try:
+                    values.append(float(r[agg_column]))
+                except (ValueError, KeyError):
+                    continue
+            if not values:
+                results[key] = 0
+            elif func == "sum":
+                results[key] = sum(values)
+            elif func == "avg":
+                results[key] = sum(values) / len(values)
+            elif func == "min":
+                results[key] = min(values)
+            elif func == "max":
+                results[key] = max(values)
+    return results
